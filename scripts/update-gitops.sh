@@ -7,13 +7,13 @@ ENVIRONMENT=$2
 
 echo "Cloning GitOps repository..."
 
-git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops-repo
+git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops
 
 cd gitops/${ENVIRONMENT}/${IMAGE_NAME}
 
 echo "Updating image tag..."
 
-sed -i "s|image:.*|image: ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
+sed -i "s|image:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
 
 git config user.name "jenkins-bot"
 git config user.email "jenkins@company.com"

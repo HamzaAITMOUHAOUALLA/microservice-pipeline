@@ -7,7 +7,7 @@ ENVIRONMENT=$2
 
 echo "Cloning GitOps repository..."
 
-git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops
+git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops-repo
 
 cd gitops/${ENVIRONMENT}/${IMAGE_NAME}
 

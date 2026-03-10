@@ -307,6 +307,7 @@ pipeline {
         }
 
         stage('Deploy Existing Image') {
+            steps {
 
             when { expression { params.ACTION == 'DEPLOY' } }
 
@@ -322,6 +323,7 @@ pipeline {
                     '''
 
                 }
+            }
 
         }
 

@@ -6,10 +6,13 @@ IMAGE_TAG=$1
 ENVIRONMENT=$2
 
 echo "Cloning GitOps repository..."
+rm -rf gitops-K8S
+rm -rf gitops
+rm -rf gitops-repo
 
-git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops-K8S
+git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops
 
-cd gitops-K8S/${ENVIRONMENT}/${IMAGE_NAME}
+cd gitops/${ENVIRONMENT}/${IMAGE_NAME}
 
 echo "Updating image tag..."
 

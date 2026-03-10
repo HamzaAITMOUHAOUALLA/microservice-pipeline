@@ -211,8 +211,8 @@ pipeline {
             steps {
 
                 sh '''
-                chmod +x scripts/build-image.sh
-                scripts/build-image.sh staging
+                chmod +x template/scripts/build-image.sh
+                template/scripts/build-image.sh staging
                 '''
 
             }

@@ -7,8 +7,8 @@ ENVIRONMENT=$2
 
 echo "Deploying existing image..."
 
-chmod +x scripts/update-gitops.sh
+chmod +x template/scripts/update-gitops.sh
 
-scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
+template/scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
 
 echo "Deployment triggered via GitOps"

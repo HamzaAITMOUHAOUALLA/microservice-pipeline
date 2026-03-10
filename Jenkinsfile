@@ -313,8 +313,8 @@ pipeline {
             steps {
 
                 sh '''
-                chmod +x scripts/deploy-existing-image.sh
-                scripts/deploy-existing-image.sh ${IMAGE_TAG} ${ENVIRONMENT}
+                chmod +x template/scripts/deploy-existing-image.sh
+                template/scripts/deploy-existing-image.sh ${IMAGE_TAG} ${ENVIRONMENT}
                 '''
 
             }

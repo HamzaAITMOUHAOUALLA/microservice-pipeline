@@ -64,7 +64,7 @@ pipeline {
             }
         }
 
-        stage('Skip Bot Commit') {
+    /* stage('Skip Bot Commit') {
             when { expression { params.ACTION == 'BUILD' } }
             steps {
                 script {
@@ -82,7 +82,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Verify Variables') {
             steps {

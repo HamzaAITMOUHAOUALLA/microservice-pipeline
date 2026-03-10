@@ -307,10 +307,9 @@ pipeline {
         }
 
         stage('Deploy Existing Image') {
+             when { expression { params.ACTION == 'DEPLOY' } }
+           
             steps {
-
-            when { expression { params.ACTION == 'DEPLOY' } }
-
                 withCredentials([usernamePassword(
                     credentialsId: 'git-credentials',
                     usernameVariable: 'GIT_USER',

@@ -310,14 +310,18 @@ pipeline {
 
             when { expression { params.ACTION == 'DEPLOY' } }
 
-            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'git-credentials',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_PASS'
+                )]) {
 
-                sh '''
-                chmod +x template/scripts/deploy-existing-image.sh
-                template/scripts/deploy-existing-image.sh ${IMAGE_TAG} ${ENVIRONMENT}
-                '''
+                    sh '''
+                    chmod +x template/scripts/update-gitops.sh
+                    template/scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
+                    '''
 
-            }
+                }
 
         }
 

@@ -3,6 +3,7 @@
 set -e
 
 TAG=$1
+IMAGE_NAME=$3
 
 echo "Building Docker image..."
 

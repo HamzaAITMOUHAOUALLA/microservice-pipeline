@@ -6,7 +6,7 @@ pipeline {
 
         choice(
             name: 'ACTION',
-            choices: ['BUILD', 'DEPLOY'],
+            choices: ['BUILD_AND_DEPLOY', 'DEPLOY_EXISTING'],
             description: 'Pipeline action'
         )
 
@@ -57,16 +57,24 @@ pipeline {
     /* ======================= CI ========================== */
 
         stage('Checkout Source') {
-            when { expression { params.ACTION == 'BUILD' } }
+
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
+
             steps {
+
                 git branch: "${SOURCE_BRANCH}",
                     url: "https://${SOURCE_REPO}"
+
             }
         }
 
-    /* stage('Skip Bot Commit') {
-            when { expression { params.ACTION == 'BUILD' } }
+    /*
+        stage('Skip Bot Commit') {
+
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
+
             steps {
+
                 script {
 
                     def author = sh(
@@ -80,12 +88,17 @@ pipeline {
                         currentBuild.result = 'NOT_BUILT'
                         error("Build triggered by Jenkins bot, skipping pipeline")
                     }
+
                 }
+
             }
-        }*/
+        }
+    */
 
         stage('Verify Variables') {
+
             steps {
+
                 script {
 
                     def required = [
@@ -103,11 +116,15 @@ pipeline {
                     }
 
                 }
+
             }
+
         }
 
         stage('Build') {
-            when { expression { params.ACTION == 'BUILD' } }
+
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
+
             steps {
 
                 sh '''
@@ -124,13 +141,14 @@ pipeline {
 
         stage('Unit Test & Quality Checks') {
 
-            when { expression { params.ACTION == 'BUILD' } }
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
 
             parallel {
 
                 stage('Unit Tests') {
 
-                    /*steps {
+                    /*
+                    steps {
                         sh '''
                         if [ -f mvnw ]; then
                         ./mvnw test
@@ -138,7 +156,8 @@ pipeline {
                         mvn test
                         fi
                         '''
-                    }*/
+                    }
+                    */
 
                     steps {
                         sh 'echo "unit tests"'
@@ -187,7 +206,7 @@ pipeline {
 
         stage('Checkout Template') {
 
-            when { expression { params.ACTION == 'BUILD' } }
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
 
             steps {
 
@@ -206,7 +225,7 @@ pipeline {
 
         stage('Build Staging Image') {
 
-            when { expression { params.ACTION == 'BUILD' } }
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
 
             steps {
 
@@ -221,7 +240,7 @@ pipeline {
 
         stage('Deploy Staging Container') {
 
-            when { expression { params.ACTION == 'BUILD' } }
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
 
             steps {
 
@@ -242,7 +261,7 @@ pipeline {
 
         stage('Security & E2E Tests') {
 
-            when { expression { params.ACTION == 'BUILD' } }
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
 
             parallel {
 
@@ -289,30 +308,32 @@ pipeline {
 
         }
 
-    /* ================== PRODUCTION ======================= */
+    /* ================== BUILD FINAL IMAGE ======================= */
 
         stage('Build & Push Production Image') {
 
-            when { expression { params.ACTION == 'BUILD' } }
+            when { expression { params.ACTION == 'BUILD_AND_DEPLOY' } }
 
             steps {
 
                 sh '''
                 chmod +x template/scripts/build-image.sh
                 template/scripts/build-image.sh ${IMAGE_TAG}
+
                 chmod +x template/scripts/push-image.sh
                 template/scripts/push-image.sh ${IMAGE_TAG}
-
                 '''
 
             }
 
         }
 
-        stage('Deploy Existing Image') {
-             when { expression { params.ACTION == 'DEPLOY' } }
-           
+    /* ================== DEPLOY ======================= */
+
+        stage('Deploy Image') {
+
             steps {
+
                 withCredentials([usernamePassword(
                     credentialsId: 'git-credentials',
                     usernameVariable: 'GIT_USER',
@@ -321,10 +342,11 @@ pipeline {
 
                     sh '''
                     chmod +x template/scripts/update-gitops.sh
-                    template/scripts/update-gitops.sh ${IMAGE_TAG}  ${ENVIRONMENT} 
+                    template/scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
                     '''
 
                 }
+
             }
 
         }

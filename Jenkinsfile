@@ -318,7 +318,7 @@ pipeline {
 
                     sh '''
                     chmod +x template/scripts/update-gitops.sh
-                    template/scripts/update-gitops.sh ${IMAGE_TAG} ${IMAGE_NAME} ${ENVIRONMENT} 
+                    template/scripts/update-gitops.sh ${IMAGE_TAG}  ${ENVIRONMENT} 
                     '''
 
                 }

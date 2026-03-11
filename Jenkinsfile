@@ -9,17 +9,17 @@ pipeline {
             choices: ['BUILD_AND_DEPLOY', 'DEPLOY_EXISTING'],
             description: 'Pipeline action'
         )
+        
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['dev','staging','prod'],
+            description: 'Deployment environment'
+        )
 
         string(
             name: 'IMAGE_TAG',
             defaultValue: 'latest',
             description: 'Docker image tag'
-        )
-
-        choice(
-            name: 'ENVIRONMENT',
-            choices: ['dev','staging','prod'],
-            description: 'Deployment environment'
         )
     }
 

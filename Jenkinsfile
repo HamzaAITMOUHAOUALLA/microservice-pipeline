@@ -298,8 +298,8 @@ pipeline {
             steps {
 
                 sh '''
-                chmod +x template/scripts/push-image.sh
-                template/scripts/push-image.sh ${IMAGE_TAG}
+                chmod +x template/scripts/build-image.sh
+                template/scripts/build-image.sh ${IMAGE_TAG}
                 '''
 
             }
